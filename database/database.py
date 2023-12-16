@@ -29,8 +29,3 @@ class Database:
         return [user for user in self.c.fetchall()]
     
     
-
-# if __name__ == '__main__':
-#     db = Database('teste', '1234567890', '123456789')
-#     db.insert_user()
-#     print(db.consult())
