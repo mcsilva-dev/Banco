@@ -1,4 +1,5 @@
-from .bank import Bank
+from bank import Bank
+from database import Database
 from datetime import datetime
 import re
 
@@ -13,8 +14,14 @@ class Client(Bank):
             self.date_of_birth = date_of_birth
         else:
             raise ValueError('Data de nascimento inválida')
-    
+
     def create_account(self):
         super().__init__(f'{datetime.now().day}/{datetime.now().month}/{datetime.now().year}')
         return self
         
+    def database_register(self):
+        db = Database()
+        db.create_table()
+        db.insert_user(self.name, self.document_number, self.date_of_birth, self.account_number)
+        db.conn.close()
+        return self
