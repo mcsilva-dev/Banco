@@ -24,11 +24,12 @@ class Database:
                 return None
         self.c.execute('''INSERT INTO users (name, document, date_of_birth, phone_number, account_number, balance) VALUES (?,?,?,?,?,?)''',\
             (name, document, date_of_birth, phone_number, account_number, balance))
-        self.conn.commit()
-             
+        self.conn.commit()         
     
     def consult(self):
         self.c.execute('''SELECT * FROM users''')
         return [user for user in self.c.fetchall()]
     
+    def close(self):
+        return self.conn.close()
     

@@ -10,7 +10,10 @@ if __name__ == '__main__':
     Faker.seed(0)
     for _ in range(100):
         client = Client(fake.name(), fake.cpf(), str(fake.date_of_birth()), fake.cellphone_number()).create_account()
-        client.database_register() 
+        db = Database()
+        db.create_table()
+        db.insert_user(client.name, client.document_number, client.date_of_birth, client.phone_number, client.account_number, client.balance)
+        db.close()
     db = Database()
     for info in db.consult():
         print(f"Cliente: {info[1]}")
