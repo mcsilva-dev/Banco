@@ -12,16 +12,18 @@ class Database:
             document TEXT NOT NULL,
             date_of_birth TEXT NOT NULL,
             phone_number TEXT NOT NULL,
-            account_number TEXT NOT NULL
+            account_number TEXT NOT NULL,
+            balance INTEGER
         )''')
         self.conn.commit()
     
-    def insert_user(self, name, document, date_of_birth, phone_number, account_number):
+    def insert_user(self, name, document, date_of_birth, phone_number, account_number, balance):
         for register in self.c.execute('''SELECT * FROM users'''):
             if register[1] == name and register[2] == document:
                 print("Usuário ja registrado")
                 return None
-        self.c.execute('''INSERT INTO users (name, document, date_of_birth, phone_number, account_number) VALUES (?,?,?,?,?)''', (name, document, date_of_birth, phone_number, account_number))
+        self.c.execute('''INSERT INTO users (name, document, date_of_birth, phone_number, account_number, balance) VALUES (?,?,?,?,?,?)''',\
+            (name, document, date_of_birth, phone_number, account_number, balance))
         self.conn.commit()
              
     

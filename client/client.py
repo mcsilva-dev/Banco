@@ -26,6 +26,6 @@ class Client(Bank):
     def database_register(self):
         db = Database()
         db.create_table()
-        db.insert_user(self.name, self.document_number, self.date_of_birth, self.phone_number, self.account_number)
+        db.insert_user(self.name, self.document_number, self.date_of_birth, self.phone_number, self.account_number, self.balance)
         db.conn.close()
         return self

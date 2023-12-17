@@ -17,4 +17,5 @@ if __name__ == '__main__':
         print(f"Documento: {info[2]}")
         print(f"Data de nascimento: {info[3]}")
         print(f"Telefone: {info[4]}")
-        print(f"Conta: {info[5]}\n\n")
+        print(f"Conta: {info[5]}")
+        print(f"Saldo: {info[6]}\n\n")
