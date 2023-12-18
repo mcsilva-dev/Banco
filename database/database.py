@@ -26,8 +26,8 @@ class Database:
             (name, document, date_of_birth, phone_number, account_number, balance))
         self.conn.commit()         
     
-    def consult(self):
-        self.c.execute('''SELECT * FROM users''')
+    def consult(self, name):
+        self.c.execute('''SELECT * FROM users WHERE name = ?''', (name,))
         return [user for user in self.c.fetchall()]
     
     def close(self):
