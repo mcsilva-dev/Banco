@@ -12,7 +12,7 @@ def menu(*args):
 
 def consulta(name):
     db = Database()
-    for info in db.consult(name):
+    for info in db.name_consult(name):
         print(f"Cliente: {info[1]}")
         print(f"Documento: {info[2]}")
         print(f"Data de nascimento: {info[3]}")
