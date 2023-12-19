@@ -1,5 +1,6 @@
 import sqlite3
 
+
 class Database:
     """
     This class provides an interface to a database.
@@ -26,8 +27,9 @@ class Database:
             balance INTEGER
         )''')
         self.conn.commit()
-    
-    def insert_user(self, name: str, document: str, date_of_birth: str, phone_number: str, account_number: str, balance: int):
+
+    def insert_user(self, name: str, document: str, date_of_birth: str, phone_number: str, account_number: str,
+                    balance: int):
         """
         Insert a new user into the database.
 
@@ -50,8 +52,8 @@ class Database:
         self.c.execute('''INSERT INTO users (name, document, date_of_birth, phone_number, account_number, balance) 
                        VALUES (?,?,?,?,?,?)''',
                        (name, document, date_of_birth, phone_number, account_number, balance))
-        self.conn.commit()         
-    
+        self.conn.commit()
+
     def name_consult(self, name):
         """
         Retrieve a list of users with the specified name from the database.
