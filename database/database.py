@@ -18,12 +18,12 @@ class Database:
         """
         self.c.execute('''CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL,
-            documento TEXT NOT NULL,
-            data_nascimento TEXT NOT NULL,
-            telefone TEXT NOT NULL,
-            numero_conta TEXT NOT NULL,
-            saldo INTEGER
+            name TEXT NOT NULL,
+            document TEXT NOT NULL,
+            date_of_birth TEXT NOT NULL,
+            phone_number TEXT NOT NULL,
+            account_number TEXT NOT NULL,
+            balance INTEGER
         )''')
         self.conn.commit()
     
@@ -52,7 +52,7 @@ class Database:
                        (name, document, date_of_birth, phone_number, account_number, balance))
         self.conn.commit()         
     
-    def name_consult(self, name: str) -> list:
+    def name_consult(self, name):
         """
         Retrieve a list of users with the specified name from the database.
 
@@ -63,6 +63,10 @@ class Database:
             list: A list of users with the specified name.
         """
         self.c.execute('''SELECT * FROM users WHERE name = ?''', (name,))
+        return [user for user in self.c.fetchall()]
+
+    def document_consult(self, document):
+        self.c.execute('''SELECT * FROM users WHERE document = ?''', (document,))
         return [user for user in self.c.fetchall()]
     
     def close(self):

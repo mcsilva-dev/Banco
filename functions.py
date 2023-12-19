@@ -27,6 +27,11 @@ def name_consult(name):
     results = db.name_consult(name)
     return results
 
+def document_consult(document):
+    db = Database()
+    results = db.document_consult(document)
+    return results
+
 def add_client(args):
     """
     Adds a new client to the database.

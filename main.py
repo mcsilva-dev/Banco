@@ -1,10 +1,10 @@
 from client import Client
 from database import Database
 from faker import Faker
-from functions import menu, add_client, name_consult
+from functions import menu, add_client, name_consult, document_consult
 import re
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
     """
     This is the main function of the application. 
     It contains the main menu and the logic to execute the selected option.
@@ -41,14 +41,43 @@ if __name__ == '__main__':
                     their details are printed. If no client is found, a message is displayed.
                     """
                     # takes the user input for the client name and searches the database using the name_consult function
-                    name = input('Enter client name: ').upper()
-                    for info in name_consult(name):
-                            print(f"Cliente: {info[1]}")
-                            print(f"Documento: {info[2]}")
-                            print(f"Data de nascimento: {info[3]}")
-                            print(f"Telefone: {info[4]}")
-                            print(f"Conta: {info[5]}")
-                            print(f"Saldo: {info[6]}\n\n")
+                    while True:
+                        print('Consultar por;'.upper())
+                        print('1 - NOME')
+                        print('2 - DOCUMENTO')
+                        try:
+                            option = int(input('>>'))
+                            assert option == 1 or option == 2
+                            break
+                        except AssertionError:
+                            print('Opção inválida'.upper())
+                            continue
+                    match option:
+                        case 1:
+                            name = input('NOME DO CLIENTE: ').upper()
+                            for info in name_consult(name):
+                                print(f"Cliente: {info[1]}")
+                                print(f"Documento: {info[2]}")
+                                print(f"Data de nascimento: {info[3]}")
+                                print(f"Telefone: {info[4]}")
+                                print(f"Conta: {info[5]}")
+                                print(f"Saldo: {info[6]}\n\n")
+                        case 2:
+                            while True:
+                                try:
+                                    document = input('NÚMERO DO DOCUMENTO: ')
+                                    assert re.compile(r'(\d{3}).(\d{3}).(\d{3})\-(\d{2})').fullmatch(document)
+                                    for info in document_consult(document):
+                                        print(f"Cliente: {info[1]}")
+                                        print(f"Documento: {info[2]}")
+                                        print(f"Data de nascimento: {info[3]}")
+                                        print(f"Telefone: {info[4]}")
+                                        print(f"Conta: {info[5]}")
+                                        print(f"Saldo: {info[6]}\n\n")
+                                    break
+                                except AssertionError:
+                                    print('Documento inválido (REF - xxx.xxx.xxx-xx)'.upper())
+                                    continue
                 case 3:
                     break
         except (ValueError, IndexError):
