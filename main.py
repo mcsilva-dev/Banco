@@ -4,8 +4,6 @@ from faker import Faker
 from functions import menu, add_client, name_consult
 import re
 
-
-
 if __name__ == '__main__':
     options = ['Adicionar cliente', 'Consultar cliente', 'Sair']
     while True:
@@ -16,9 +14,9 @@ if __name__ == '__main__':
                 raise IndexError
             match option:
                 case 1:
-                    client = Client(input('Digite o nome do cliente: '.upper()), 
-                                    input('Digite o documento do cliente: '.upper()), 
-                                    input('Digite a data de nascimento do cliente: '.upper()), 
+                    client = Client(input('Digite o nome do cliente: '.upper()),
+                                    input('Digite o documento do cliente: '.upper()),
+                                    input('Digite a data de nascimento do cliente: '.upper()),
                                     input('Digite o telefone do cliente: '.upper())).create_account()
                     add_client(client)
                 case 2:
@@ -29,5 +27,3 @@ if __name__ == '__main__':
         except (ValueError, IndexError):
             print('Opção inválida')
             continue
-        
-   
