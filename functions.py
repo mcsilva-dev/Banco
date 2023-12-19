@@ -1,5 +1,6 @@
 from database import Database
 
+
 def menu(*args):
     """
     Prints a menu with options.
@@ -7,10 +8,11 @@ def menu(*args):
     Parameters:
     args -- a list of options to be displayed in the menu.
     """
-    print('MENU'.center(50, '-'))
+    print('MENU PRINCIPAL'.center(50, '-'))
     print("\nESCOLHA UMA OPÇÃO:\n")
     for index, value in enumerate(args):
         print(f'{index + 1} - {value.upper()}')
+
 
 def name_consult(name):
     """
@@ -27,10 +29,12 @@ def name_consult(name):
     results = db.name_consult(name)
     return results
 
+
 def document_consult(document):
     db = Database()
     results = db.document_consult(document)
-    return results
+    return results if len(results) > 0 else None
+
 
 def add_client(args):
     """
@@ -42,5 +46,12 @@ def add_client(args):
     """
     db = Database()
     db.create_table()
-    db.insert_user(args.name, args.document_number, args.date_of_birth, args.phone_number, args.account_number, args.balance)
+    db.insert_user(args.name, args.document_number, args.date_of_birth, args.phone_number, args.account_number,
+                   args.balance)
+    db.close()
+
+
+def update_balance(new_balance, name):
+    db = Database()
+    db.update_balance(new_balance, name)
     db.close()

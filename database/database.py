@@ -9,7 +9,7 @@ class Database:
         """
         Initialize the database connection.
         """
-        self.conn = sqlite3.connect('test.db')
+        self.conn = sqlite3.connect('database.db')
         self.c = self.conn.cursor()
 
     def create_table(self):
@@ -68,7 +68,11 @@ class Database:
     def document_consult(self, document):
         self.c.execute('''SELECT * FROM users WHERE document = ?''', (document,))
         return [user for user in self.c.fetchall()]
-    
+
+    def update_balance(self, new_balance, name):
+        self.c.execute('''UPDATE users SET balance = ? WHERE name = ?''', (new_balance, name,))
+        self.conn.commit()
+
     def close(self):
         """
         Close the database connection.
