@@ -111,7 +111,6 @@ if __name__ == '__main__':
                             update_balance(balance, account['name'])
                         except AssertionError:
                             print('ERRO: VALOR EM CONTA INSUFICIENTE, OPERAÇÃO ABORTADA!')
-
                 case 4:
                     break
         except (ValueError, IndexError):
