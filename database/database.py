@@ -74,12 +74,15 @@ class Database:
             balance = balance[0][-1]
         except AssertionError:
             return 1
-        if movimentation_type == 'SAQUE':
+        if movimentation_type == 'WITHDRAW':
             try:
                 assert balance - value >= 0
                 balance -= value
             except AssertionError:
                 return 2
+            self.update_balance(new_balance=balance, name=name)
+        elif movimentation_type == 'DEPOSIT':
+            balance += value
             self.update_balance(new_balance=balance, name=name)
         self.c.execute('''INSERT INTO movimentations (client_name, id_client, movimentation_type,
                         value, date_movimentation) 
@@ -133,7 +136,7 @@ if __name__ == '__main__':
                    date_of_birth='22/06/1999', balance=15000)
     client = db.name_consult('Geraldo Luiz')
     print(client)
-    if db.insert_movimentation(1, 'Geraldo', 'SAQUE',
+    if db.insert_movimentation(1, 'Geraldo Luiz', 'DEPOSIT',
                                value=400, date=datetime.now().strftime('%d/%m/%Y %H:%M:%S')) == 1:
         print('ERRO: USUÁRIO INEXISTENTE, OPERAÇÃO ABORTADA!')
     elif db.insert_movimentation(1, 'Geraldo Luiz', 'SAQUE',
