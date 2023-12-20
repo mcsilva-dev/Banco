@@ -7,11 +7,11 @@ class Database:
     This class provides an interface to a database.
     """
 
-    def __init__(self):
+    def __init__(self, database):
         """
         Initialize the database connection.
         """
-        self.conn = sqlite3.connect('teste.db')
+        self.conn = sqlite3.connect(database+'.db')
         self.c = self.conn.cursor()
 
     def create_client_table(self):
@@ -68,10 +68,11 @@ class Database:
         self.conn.commit()
 
     def insert_movimentation(self, id_client, name: str, movimentation_type, value: float, date):
+        self.create_movimentation_table()
         try:
             balance = self.name_consult(name)
             assert len(balance) > 0
-            balance = balance[0][-1]
+            balance = balance[0]['balance']
         except AssertionError:
             return 1
         if movimentation_type == 'WITHDRAW':
@@ -101,12 +102,14 @@ class Database:
         Returns:
             list: A list of users with the specified name.
         """
-        self.c.execute('''SELECT * FROM users WHERE name = ?''', (name,))
-        return [user for user in self.c.fetchall()]
+        results = self.c.execute('''SELECT * FROM users WHERE name = ?''', (name,))
+        colums = [description[0] for description in results.description]
+        return [dict(zip(colums, line)) for line in self.c.fetchall()]
 
     def document_consult(self, document):
-        self.c.execute('''SELECT * FROM users WHERE document = ?''', (document,))
-        return [user for user in self.c.fetchall()]
+        results = self.c.execute('''SELECT * FROM users WHERE document = ?''', (document,))
+        colums = [description[0] for description in results.description]
+        return [dict(zip(colums, line)) for line in self.c.fetchall()]
 
     def update_balance(self, new_balance, name):
         self.c.execute('''UPDATE users SET balance = ? WHERE name = ?''', (new_balance, name,))
@@ -126,23 +129,23 @@ class Database:
         return self.conn.close()
 
 
-# if __name__ == '__main__':
-#     db = Database()
-#     db.create_client_table()
-#     db.create_movimentation_table()
-#     db.insert_user('Geraldo Luiz', document='109.876.543-21', phone_number='+55 33 9 84526418', account_number='77777',
-#                    date_of_birth='05/10/1990', balance=10000)
-#     db.insert_user('Paulo Jose', document='123.456.789-10', phone_number='+55 33 9 98451987', account_number='55566',
-#                    date_of_birth='22/06/1999', balance=15000)
-#     client = db.name_consult('Geraldo Luiz')
-#     print(client)
-#     if db.insert_movimentation(1, 'Geraldo Luiz', 'DEPOSIT',
-#                                value=400, date=datetime.now().strftime('%d/%m/%Y %H:%M:%S')) == 1:
-#         print('ERRO: USUÁRIO INEXISTENTE, OPERAÇÃO ABORTADA!')
-#     elif db.insert_movimentation(1, 'Geraldo Luiz', 'SAQUE',
-#                                value=400, date=datetime.now().strftime('%d/%m/%Y %H:%M:%S')) == 2:
-#         print('ERRO: SALDO INSUFICIENTE, OPERAÇÃO ABORTADA!')
-#     data = db.consult_movimentation()
-#     print(data)
-#     client = db.name_consult('Geraldo Luiz')
-#     print(client)
+if __name__ == '__main__':
+    db = Database('teste')
+    db.create_client_table()
+    db.create_movimentation_table()
+    db.insert_user('Geraldo Luiz', document='109.876.543-21', phone_number='+55 33 9 84526418', account_number='77777',
+                   date_of_birth='05/10/1990', balance=10000)
+    db.insert_user('Paulo Jose', document='123.456.789-10', phone_number='+55 33 9 98451987', account_number='55566',
+                   date_of_birth='22/06/1999', balance=15000)
+    client = db.name_consult('Geraldo Luiz')
+    print(client)
+    if db.insert_movimentation(1, 'Geraldo Luiz', 'DEPOSIT',
+                               value=400, date=datetime.now().strftime('%d/%m/%Y %H:%M:%S')) == 1:
+        print('ERRO: USUÁRIO INEXISTENTE, OPERAÇÃO ABORTADA!')
+    elif db.insert_movimentation(1, 'Geraldo Luiz', 'SAQUE',
+                               value=400, date=datetime.now().strftime('%d/%m/%Y %H:%M:%S')) == 2:
+        print('ERRO: SALDO INSUFICIENTE, OPERAÇÃO ABORTADA!')
+    data = db.consult_movimentation()
+    print(data)
+    client = db.name_consult('Geraldo Luiz')
+    print(client)
