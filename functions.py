@@ -27,12 +27,14 @@ def name_consult(name):
     """
     db = Database()
     results = db.name_consult(name)
+    db.close()
     return results
 
 
 def document_consult(document):
     db = Database()
     results = db.document_consult(document)
+    db.close()
     return results if len(results) > 0 else None
 
 
