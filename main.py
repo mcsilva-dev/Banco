@@ -97,9 +97,7 @@ if __name__ == '__main__':
                             account['balance'] = _[6]
                         try:
                             account_number = input('NÚMERO DA CONTA: ')
-                            print(account['account_number'])
                             assert account_number == account['account_number']
-
                         except AssertionError:
                             print('ERRO: NÚMERO DE CONTA DIVERGENTE, OPERAÇÃO ABORTADA!\n')
                         try:

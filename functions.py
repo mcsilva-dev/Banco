@@ -45,7 +45,7 @@ def add_client(args):
     date of birth, phone number, account number, and balance.
     """
     db = Database()
-    db.create_table()
+    db.create_client_table()
     db.insert_user(args.name, args.document_number, args.date_of_birth, args.phone_number, args.account_number,
                    args.balance)
     db.close()
