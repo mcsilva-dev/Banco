@@ -1,8 +1,5 @@
 from client import Client
-from database import Database
-from faker import Faker
 from functions import menu, add_client, name_consult, document_consult, movimentation, history_movimentation
-import re
 
 if __name__ == '__main__':
     """
@@ -27,12 +24,20 @@ if __name__ == '__main__':
                     The object is then added to the database using the add_client function.
                     """
                     # creates a new Client object with the user input for the client details
-                    client = Client(input('Nome do cliente: ').upper(),
-                                    input('Documento: ').upper(),
-                                    input('Data de nascimento: ').upper(),
-                                    input('Numero de telefone (começar com +55): ').upper())
+                    print()
+                    print("ADICIONANDO NOVO CLIENTE".center(50, '-'))
+                    try:
+                        client = Client(input('NOME DO CLIENTE: '),
+                                        input('DOCUMENTO: '),
+                                        input('DATA DE NASCIMENTO: '),
+                                        input('NÚMERO DE TELEFONE (COMEÇAR COM +55): '),
+                                        int(input('DEPOSITO INICIAL: ')))
+                    except Exception as error:
+                        print('ERRO: DADOS INCOMPATIVEIS, OPERAÇÃO ABORTADA!')
+                        continue
                     # adds the client object to the database using the add_client function
-                    add_client(client)
+                    add_client(client, 'database')
+                    print('CLIENTE ADICIONADA A BASE DE DADOS\n')
                 case 2:
                     """
                     This function is used to search for a client in the database based 
@@ -65,9 +70,7 @@ if __name__ == '__main__':
                                 print(f"Cliente: {client['name']}")
                                 print(f"Documento: {client['document']}")
                                 print(f"Data de nascimento: {client['date_of_birth']}")
-                                print(f"Telefone: {client['phone_number']}")
-                                print(f"Conta: {client['account_number']}")
-                                print(f"Saldo: {client['balance']}\n")
+                                print(f"Telefone: {client['phone_number']}\n")
                             else:
                                 print('ERRO: CLIENTE NÃO LOCALIZADO NA BASE DE DADOS, OPERAÇÃO ABORTADA!\n')
                         case 2:
@@ -83,8 +86,6 @@ if __name__ == '__main__':
                                     print(f"Documento: {client['document']}")
                                     print(f"Data de nascimento: {client['date_of_birth']}")
                                     print(f"Telefone: {client['phone_number']}")
-                                    print(f"Conta: {client['account_number']}")
-                                    print(f"Saldo: {client['balance']}\n")
                                     continue
                                 print('ERRO: DOCUMENTO INVÁLIDO, OPERAÇÃO ABORTADA!\n')
                             except AssertionError:

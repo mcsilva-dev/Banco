@@ -1,5 +1,5 @@
-from random import randint
 from faker import Faker
+
 
 class Bank:
     """
@@ -16,17 +16,11 @@ class Bank:
         account_number (str): The unique account number of the bank account.
     """
 
-    def __init__(self, create_date):
+    def __init__(self, create_date, value):
         """
         Initialize a new Bank instance.
         """
         fake = Faker(['pt_BR'])
         self.create_date = create_date
-        self.balance = randint(0, 100000)
+        self.balance = value
         self.account_number = fake.credit_card_number()
-    
-    
-        
-    
-    
-
