@@ -1,7 +1,7 @@
 from client import Client
 from database import Database
 from faker import Faker
-from functions import menu, add_client, name_consult, document_consult, movimentation
+from functions import menu, add_client, name_consult, document_consult, movimentation, history_movimentation
 import re
 
 if __name__ == '__main__':
@@ -9,7 +9,7 @@ if __name__ == '__main__':
     This is the main function of the application. 
     It contains the main menu and the logic to execute the selected option.
     """
-    options = ['Adicionar cliente', 'Consultar cliente', 'Realizar movimentação', 'Sair']
+    options = ['Adicionar cliente', 'Consultar cliente', 'Realizar movimentação', 'histórico de movimentações', 'Sair']
     while True:
         # calls the menu function and passes the options list as an argument
         menu(*options)
@@ -73,18 +73,20 @@ if __name__ == '__main__':
                         case 2:
                             try:
                                 document = input('NÚMERO DO DOCUMENTO: ')
-                                assert re.compile(r'(\d{3}).(\d{3}).(\d{3})\-(\d{2})').fullmatch(document)
-                                client = document_consult(document, 'database')
-                                print()
-                                print('RESULTADO DA BUSCA'.center(50, '-'))
-                                print(f"\nid: {client['id']}")
-                                print(f"Cliente: {client['name']}")
-                                print(f"Documento: {client['document']}")
-                                print(f"Data de nascimento: {client['date_of_birth']}")
-                                print(f"Telefone: {client['phone_number']}")
-                                print(f"Conta: {client['account_number']}")
-                                print(f"Saldo: {client['balance']}\n")
-                                break
+                                data = document_consult(document, 'database')
+                                if data:
+                                    client = data[0]
+                                    print()
+                                    print('RESULTADO DA BUSCA'.center(50, '-'))
+                                    print(f"\nid: {client['id']}")
+                                    print(f"Cliente: {client['name']}")
+                                    print(f"Documento: {client['document']}")
+                                    print(f"Data de nascimento: {client['date_of_birth']}")
+                                    print(f"Telefone: {client['phone_number']}")
+                                    print(f"Conta: {client['account_number']}")
+                                    print(f"Saldo: {client['balance']}\n")
+                                    continue
+                                print('ERRO: DOCUMENTO INVÁLIDO, OPERAÇÃO ABORTADA!\n')
                             except AssertionError:
                                 print('Documento inválido (REF - xxx.xxx.xxx-xx), OPERAÇÃO ABORTADA!\n'.upper())
                 case 3:
@@ -112,14 +114,30 @@ if __name__ == '__main__':
                             continue
                         try:
                             balance = int(account['balance'])
-                            value = int(input('VALOR DO SAQUE: '))
+                            value = int(input('VALOR: '))
                             assert balance > value
                             balance -= value
-                            print('SAQUE REALIZADO')
+                            print('OPERAÇÃO REALIZADA')
                             movimentation(account['name'], 'database', value, opr_type)
                         except AssertionError:
                             print('ERRO: VALOR EM CONTA INSUFICIENTE, OPERAÇÃO ABORTADA!\n')
                 case 4:
+                    print()
+                    print('HISTÓRICO DE MOVIMENTAÇÕES'.center(50, '-'))
+                    document = input('DOCUMENTO: ')
+                    account = input('NUMERO DA CONTA: ')
+                    results = history_movimentation(document, account, 'database')
+                    if results:
+                        for _ in results:
+                            print('-' * 50)
+                            print(f'ID: {_["id_movimentation"]}')
+                            print(f'TIPO: {_["movimentation_type"]}')
+                            print(f'VALOR: R${_["value"]}')
+                            print(f"DATA: {_['date_movimentation']}")
+                            print('-' * 50)
+                        continue
+                    print("ERRO: NENHUMA MOVIMENTAÇÃO ENCONTRADA, OPERAÇÃO ABORTADA!")
+                case 5:
                     break
         except (ValueError, IndexError):
             # prints an error message if the user input is not a valid option

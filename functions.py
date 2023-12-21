@@ -63,3 +63,15 @@ def movimentation(name, database, value, movimentation_type):
                                 movimentation_type=movimentation_type,
                                 id_client=client[0]['id'],
                                 date=datetime.now().strftime('%d/%m/%Y %H:%M:%S'))
+
+
+def history_movimentation(document, account_number, database):
+    try:
+        results = document_consult(document, database)
+        assert len(results)
+        assert results[0]['account_number'] == account_number
+        db = Database(database)
+        results = db.consult_movimentation(results[0]['id'])
+        return [_ for _ in results]
+    except AssertionError:
+        return None
