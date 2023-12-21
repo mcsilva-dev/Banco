@@ -1,5 +1,5 @@
 import sqlite3
-from datetime import datetime
+import csv
 
 
 class Database:
@@ -11,7 +11,7 @@ class Database:
         """
         Initialize the database connection.
         """
-        self.conn = sqlite3.connect(database+'.db')
+        self.conn = sqlite3.connect(database + '.db')
         self.c = self.conn.cursor()
 
     def create_client_table(self):
@@ -102,7 +102,7 @@ class Database:
         Returns:
             list: A list of users with the specified name.
         """
-        results = self.c.execute('''SELECT * FROM users WHERE name = ?''', (name,))
+        results = self.c.execute('''SELECT * FROM users WHERE name = ?''', (name, ))
         colums = [description[0] for description in results.description]
         return [dict(zip(colums, line)) for line in self.c.fetchall()]
 
@@ -134,3 +134,4 @@ class Database:
         Close the database connection.
         """
         return self.conn.close()
+
