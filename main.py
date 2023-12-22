@@ -1,7 +1,12 @@
 from client import Client
-from functions import menu, add_client, name_consult, document_consult, movimentation, history_movimentation
+from create_database import create_database
+from functions import menu, add_client, name_consult, document_consult, movimentation, history_movimentation, show_results
+import os
 
 if __name__ == '__main__':
+    if not os.path.isfile('database.db'):
+        print('INICIANDO... ')
+        create_database()
     options = ['Adicionar cliente', 'Consultar cliente', 'Realizar movimentação', 'histórico de movimentações', 'Sair']
     while True:
         # calls the menu function and passes the options list as an argument
@@ -49,13 +54,7 @@ if __name__ == '__main__':
                             data = name_consult(name, 'database')
                             if data:
                                 client = data[0]
-                                print()
-                                print('RESULTADO DA BUSCA'.center(50, '-'))
-                                print(f"\nid: {client['id']}")
-                                print(f"Cliente: {client['name']}")
-                                print(f"Documento: {client['document']}")
-                                print(f"Data de nascimento: {client['date_of_birth']}")
-                                print(f"Telefone: {client['phone_number']}\n")
+                                show_results(client)
                             else:
                                 print('ERRO: CLIENTE NÃO LOCALIZADO NA BASE DE DADOS, OPERAÇÃO ABORTADA!\n')
                         case 2:
@@ -64,13 +63,7 @@ if __name__ == '__main__':
                                 data = document_consult(document, 'database')
                                 if data:
                                     client = data[0]
-                                    print()
-                                    print('RESULTADO DA BUSCA'.center(50, '-'))
-                                    print(f"\nid: {client['id']}")
-                                    print(f"Cliente: {client['name']}")
-                                    print(f"Documento: {client['document']}")
-                                    print(f"Data de nascimento: {client['date_of_birth']}")
-                                    print(f"Telefone: {client['phone_number']}")
+                                    show_results(client)
                                     continue
                                 print('ERRO: DOCUMENTO INVÁLIDO, OPERAÇÃO ABORTADA!\n')
                             except AssertionError:
@@ -82,12 +75,12 @@ if __name__ == '__main__':
                     try:
                         opr_type = int(input('>> '))
                         assert opr_type == 1 or opr_type == 2
-                        opr_type = 'WITHDRAW' if opr_type == 1 else 'DEPOSIT'
+                        opr_type = 'SAQUE' if opr_type == 1 else 'DEPOSITO'
                     except AssertionError:
                         print('ERRO: OPERAÇÃO INVÁLIDA, OPERAÇÃO ABORTADA!\n')
                         continue
-                    name = input('NOME: ')
-                    data = name_consult(name, 'database')
+                    document = input('DOCUMENTO (xxx.xxx.xxx-xx): ')
+                    data = document_consult(document, 'database')
                     if not data:
                         print('ERRO: CLIENTE NÃO LOCALIZADO NA BASE DE DADOS, OPERAÇÃO ABORTADA!\n')
                     else:
@@ -103,17 +96,17 @@ if __name__ == '__main__':
                             value = int(input('VALOR: '))
                             assert balance > value
                             balance -= value
-                            print('OPERAÇÃO REALIZADA')
+                            print('OPERAÇÃO REALIZADA COM SUCESSO!')
                             movimentation(account['name'], 'database', value, opr_type)
                         except AssertionError:
                             print('ERRO: VALOR EM CONTA INSUFICIENTE, OPERAÇÃO ABORTADA!\n')
                 case 4:
                     print()
                     print('HISTÓRICO DE MOVIMENTAÇÕES'.center(50, '-'))
-                    document = input('DOCUMENTO: ')
+                    document = input('\nDOCUMENTO (xxx.xxx.xxx-xx): ')
                     account = input('NUMERO DA CONTA: ')
                     results = history_movimentation(document, account, 'database')
-                    if results:
+                    if isinstance(results, list):
                         for _ in results:
                             print('-' * 50)
                             print(f'ID: {_["id_movimentation"]}')
@@ -122,7 +115,10 @@ if __name__ == '__main__':
                             print(f"DATA: {_['date_movimentation']}")
                             print('-' * 50)
                         continue
-                    print("ERRO: NENHUMA MOVIMENTAÇÃO ENCONTRADA, OPERAÇÃO ABORTADA!")
+                    elif results == 1:
+                        print('ERRO: DOCUMENTO INVÁLIDO, OPERAÇÃO ABORTADA!\n')
+                        continue
+                    print("ERRO: NENHUMA MOVIMENTAÇÃO ENCONTRADA, OPERAÇÃO ABORTADA!\n")
                 case 5:
                     break
         except (ValueError, IndexError):

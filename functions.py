@@ -1,4 +1,5 @@
 from database import Database
+import re
 
 
 def menu(*args):
@@ -6,6 +7,16 @@ def menu(*args):
     print("\nESCOLHA UMA OPÇÃO:\n")
     for index, value in enumerate(args):
         print(f'{index + 1} - {value.upper()}')
+
+
+def show_results(data):
+    print()
+    print('RESULTADO DA BUSCA'.center(50, '-'))
+    print(f"\nid: {data['id']}")
+    print(f"Cliente: {data['name']}")
+    print(f"Documento: {data['document']}")
+    print(f"Data de nascimento: {data['date_of_birth']}")
+    print(f"Telefone: {data['phone_number']}\n")
 
 
 def name_consult(name, database):
@@ -44,8 +55,12 @@ def movimentation(name, database, value, movimentation_type):
 
 def history_movimentation(document, account_number, database):
     try:
+        assert re.compile(r'(\d{3}).(\d{3}).(\d{3})-(\d{2})').fullmatch(document)
+    except AssertionError:
+        return 1
+    try:
         results = document_consult(document, database)
-        assert len(results)
+        assert results
         assert results[0]['account_number'] == account_number
         db = Database(database)
         results = db.consult_movimentation(results[0]['id'])

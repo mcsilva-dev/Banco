@@ -50,14 +50,14 @@ class Database:
             balance = balance[0]['balance']
         except AssertionError:
             return 1
-        if movimentation_type == 'WITHDRAW':
+        if movimentation_type == 'SAQUE':
             try:
                 assert balance - value >= 0
                 balance -= value
             except AssertionError:
                 return 2
             self.update_balance(new_balance=balance, name=name)
-        elif movimentation_type == 'DEPOSIT':
+        elif movimentation_type == 'DEPOSITO':
             balance += value
             self.update_balance(new_balance=balance, name=name)
         self.c.execute('''INSERT INTO movimentations (client_name, id_client, movimentation_type,
