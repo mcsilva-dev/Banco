@@ -41,19 +41,19 @@ def add_client(args, database):
     db.close()
 
 
-def movimentation(name, database, value, movimentation_type):
+def transactions(name, database, value, transaction_type):
     from datetime import datetime
     client = name_consult(name, database)
     if len(client):
         db = Database(database)
-        db.insert_movimentation(name=client[0]['name'],
+        db.insert_transaction(name=client[0]['name'],
                                 value=value,
-                                movimentation_type=movimentation_type,
+                                transaction_type=transaction_type,
                                 id_client=client[0]['id'],
                                 date=datetime.now().strftime('%d/%m/%Y %H:%M:%S'))
 
 
-def history_movimentation(document, account_number, database):
+def history_transactions(document, account_number, database):
     try:
         assert re.compile(r'(\d{3}).(\d{3}).(\d{3})-(\d{2})').fullmatch(document)
     except AssertionError:
@@ -63,7 +63,7 @@ def history_movimentation(document, account_number, database):
         assert results
         assert results[0]['account_number'] == account_number
         db = Database(database)
-        results = db.consult_movimentation(results[0]['id'])
+        results = db.consult_transactions(results[0]['id'])
         return [_ for _ in results]
     except AssertionError:
         return None

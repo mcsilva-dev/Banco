@@ -1,6 +1,6 @@
 from client import Client
 from create_database import create_database
-from functions import menu, add_client, name_consult, document_consult, movimentation, history_movimentation, show_results
+from functions import menu, add_client, name_consult, document_consult, transactions, history_transactions, show_results
 import os
 
 if __name__ == '__main__':
@@ -97,7 +97,7 @@ if __name__ == '__main__':
                             assert balance > value
                             balance -= value
                             print('OPERAÇÃO REALIZADA COM SUCESSO!')
-                            movimentation(account['name'], 'database', value, opr_type)
+                            transactions(account['name'], 'database', value, opr_type)
                         except AssertionError:
                             print('ERRO: VALOR EM CONTA INSUFICIENTE, OPERAÇÃO ABORTADA!\n')
                 case 4:
@@ -105,15 +105,18 @@ if __name__ == '__main__':
                     print('HISTÓRICO DE MOVIMENTAÇÕES'.center(50, '-'))
                     document = input('\nDOCUMENTO (xxx.xxx.xxx-xx): ')
                     account = input('NUMERO DA CONTA: ')
-                    results = history_movimentation(document, account, 'database')
+                    results = history_transactions(document, account, 'database')
                     if isinstance(results, list):
-                        for _ in results:
-                            print('-' * 50)
-                            print(f'ID: {_["id_movimentation"]}')
-                            print(f'TIPO: {_["movimentation_type"]}')
-                            print(f'VALOR: R${_["value"]}')
-                            print(f"DATA: {_['date_movimentation']}")
-                            print('-' * 50)
+                        if len(results) > 0:
+                            for _ in results:
+                                print('-' * 50)
+                                print(f'ID: {_["id_transaction"]}')
+                                print(f'TIPO: {_["transaction_type"]}')
+                                print(f'VALOR: R${_["value"]}')
+                                print(f"DATA: {_['date_transaction']}")
+                                print('-' * 50)
+                        else:
+                            print('\nNENHUMA OPERAÇÃO REGISTRADA.\n')
                         continue
                     elif results == 1:
                         print('ERRO: DOCUMENTO INVÁLIDO, OPERAÇÃO ABORTADA!\n')

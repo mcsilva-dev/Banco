@@ -19,14 +19,14 @@ class Database:
         )''')
         self.conn.commit()
 
-    def create_movimentation_table(self):
-        self.c.execute('''CREATE TABLE IF NOT EXISTS movimentations (
-            id_movimentation INTEGER PRIMARY KEY,
+    def create_transactions_table(self):
+        self.c.execute('''CREATE TABLE IF NOT EXISTS transactions (
+            id_transaction INTEGER PRIMARY KEY,
             client_name TEXT NOT NULL,
             id_client INTEGER,
-            movimentation_type TEXT NOT NULL,
+            transaction_type TEXT NOT NULL,
             value INTEGER,
-            date_movimentation TEXT NOT NULL,
+            date_transaction TEXT NOT NULL,
             FOREIGN KEY (id_client) REFERENCES users (id_client)
         )''')
         self.conn.commit()
@@ -42,29 +42,29 @@ class Database:
                        (str(name), str(document), str(date_of_birth), str(phone_number), str(account_number), int(balance)))
         self.conn.commit()
 
-    def insert_movimentation(self, id_client, name: str, movimentation_type, value: float, date):
-        self.create_movimentation_table()
+    def insert_transaction(self, id_client, name: str, transaction_type, value: float, date):
+        self.create_transactions_table()
         try:
             balance = self.name_consult(name)
             assert len(balance) > 0
             balance = balance[0]['balance']
         except AssertionError:
             return 1
-        if movimentation_type == 'SAQUE':
+        if transaction_type == 'SAQUE':
             try:
                 assert balance - value >= 0
                 balance -= value
             except AssertionError:
                 return 2
             self.update_balance(new_balance=balance, name=name)
-        elif movimentation_type == 'DEPOSITO':
+        elif transaction_type == 'DEPOSITO':
             balance += value
             self.update_balance(new_balance=balance, name=name)
-        self.c.execute('''INSERT INTO movimentations (client_name, id_client, movimentation_type,
-                        value, date_movimentation) 
+        self.c.execute('''INSERT INTO transactions (client_name, id_client, transaction_type,
+                        value, date_transaction) 
                         VALUES (?,?,?,?,?)
                         ''',
-                       (name, id_client, movimentation_type, value, date,))
+                       (name, id_client, transaction_type, value, date,))
         self.conn.commit()
 
     def name_consult(self, name):
@@ -81,11 +81,11 @@ class Database:
         self.c.execute('''UPDATE users SET balance = ? WHERE name = ?''', (new_balance, name,))
         self.conn.commit()
 
-    def consult_movimentation(self, id):
-        results = self.c.execute('''SELECT users.name, movimentations.id_movimentation, movimentations.movimentation_type,
-                        movimentations.value, movimentations.date_movimentation 
+    def consult_transactions(self, id):
+        results = self.c.execute('''SELECT users.name, transactions.id_transaction, transactions.transaction_type,
+                        transactions.value, transactions.date_transaction 
                         FROM users 
-                        JOIN movimentations on users.id = movimentations.id_client
+                        JOIN transactions on users.id = transactions.id_client
                         WHERE id = ?''', (id,))
         if results:
             columns = [column[0] for column in results.description]

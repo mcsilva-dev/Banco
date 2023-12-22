@@ -5,7 +5,7 @@ import csv
 def create_database():
     db = Database('database')
     db.create_client_table()
-    db.create_movimentation_table()
+    db.create_transactions_table()
 
     with open('database.csv', 'r+') as archive:
         data = csv.DictReader(archive)
