@@ -14,7 +14,7 @@ if __name__ == '__main__':
         menu(*options)
         try:
             # attempts to convert the user input to an integer and raises an exception if it is not possible
-            option = int(input('Opção: '.upper()))
+            option = int(input('Opção: '.upper()).strip())
             if option <= 0 or option > len(options):
                 raise IndexError
             # matches the selected option and executes the corresponding code block
@@ -27,11 +27,11 @@ if __name__ == '__main__':
                         account_number = ''
                         for _ in range(16):
                             account_number += str(randint(0,9))
-                        client = Client(input('NOME DO CLIENTE: '),
-                                        input('DOCUMENTO: '),
-                                        input('DATA DE NASCIMENTO: '),
-                                        input('NÚMERO DE TELEFONE (COMEÇAR COM +55): '),
-                                        int(input('DEPOSITO INICIAL: ')),
+                        client = Client(input('NOME DO CLIENTE: ').strip(),
+                                        input('DOCUMENTO: ').strip(),
+                                        input('DATA DE NASCIMENTO: ').strip(),
+                                        input('NÚMERO DE TELEFONE (COMEÇAR COM +55): ').strip(),
+                                        int(input('DEPOSITO INICIAL: ').strip()),
                                         account_number)
                     except Exception as error:
                         print('ERRO: DADOS INCOMPATIVEIS, OPERAÇÃO ABORTADA!')
@@ -55,7 +55,7 @@ if __name__ == '__main__':
                             continue
                     match option:
                         case 1:
-                            name = input('NOME: ')
+                            name = input('NOME: ').strip()
                             data = name_consult(name, 'database')
                             if data:
                                 client = data[0]
@@ -78,27 +78,27 @@ if __name__ == '__main__':
                     print("MENU DE OPERAÇÕES".center(50, '-'))
                     print("\n1 - SAQUE\n2 - DEPOSITO")
                     try:
-                        opr_type = int(input('>> '))
+                        opr_type = int(input('>> ').strip())
                         assert opr_type == 1 or opr_type == 2
                         opr_type = 'SAQUE' if opr_type == 1 else 'DEPOSITO'
                     except AssertionError:
                         print('ERRO: OPERAÇÃO INVÁLIDA, OPERAÇÃO ABORTADA!\n')
                         continue
-                    document = input('DOCUMENTO (xxx.xxx.xxx-xx): ')
+                    document = input('DOCUMENTO (xxx.xxx.xxx-xx): ').strip()
                     data = document_consult(document, 'database')
                     if not data:
                         print('ERRO: CLIENTE NÃO LOCALIZADO NA BASE DE DADOS, OPERAÇÃO ABORTADA!\n')
                     else:
                         account = data[0]
                         try:
-                            account_number = input('NÚMERO DA CONTA: ')
+                            account_number = input('NÚMERO DA CONTA: ').strip()
                             assert account_number == account['account_number']
                         except AssertionError:
                             print('ERRO: NÚMERO DE CONTA DIVERGENTE, OPERAÇÃO ABORTADA!\n')
                             continue
                         try:
                             balance = int(account['balance'])
-                            value = int(input('VALOR: '))
+                            value = int(input('VALOR: ').strip())
                             assert balance > value
                             balance -= value
                             print('OPERAÇÃO REALIZADA COM SUCESSO!')
@@ -108,8 +108,8 @@ if __name__ == '__main__':
                 case 4:
                     print()
                     print('HISTÓRICO DE MOVIMENTAÇÕES'.center(50, '-'))
-                    document = input('\nDOCUMENTO (xxx.xxx.xxx-xx): ')
-                    account = input('NUMERO DA CONTA: ')
+                    document = input('\nDOCUMENTO (xxx.xxx.xxx-xx): ').strip()
+                    account = input('NUMERO DA CONTA: ').strip()
                     results = history_transactions(document, account, 'database')
                     if isinstance(results, list):
                         if len(results) > 0:
