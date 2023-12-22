@@ -2,10 +2,6 @@ from client import Client
 from functions import menu, add_client, name_consult, document_consult, movimentation, history_movimentation
 
 if __name__ == '__main__':
-    """
-    This is the main function of the application. 
-    It contains the main menu and the logic to execute the selected option.
-    """
     options = ['Adicionar cliente', 'Consultar cliente', 'Realizar movimentação', 'histórico de movimentações', 'Sair']
     while True:
         # calls the menu function and passes the options list as an argument
