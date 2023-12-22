@@ -1,4 +1,5 @@
 from client import Client
+from random import randint
 from create_database import create_database
 from functions import menu, add_client, name_consult, document_consult, transactions, history_transactions, show_results
 import os
@@ -23,16 +24,20 @@ if __name__ == '__main__':
                     print()
                     print("ADICIONANDO NOVO CLIENTE".center(50, '-'))
                     try:
+                        account_number = ''
+                        for _ in range(16):
+                            account_number += str(randint(0,9))
                         client = Client(input('NOME DO CLIENTE: '),
                                         input('DOCUMENTO: '),
                                         input('DATA DE NASCIMENTO: '),
                                         input('NÚMERO DE TELEFONE (COMEÇAR COM +55): '),
-                                        int(input('DEPOSITO INICIAL: ')))
+                                        int(input('DEPOSITO INICIAL: ')),
+                                        account_number)
                     except Exception as error:
                         print('ERRO: DADOS INCOMPATIVEIS, OPERAÇÃO ABORTADA!')
                         continue
                     # adds the client object to the database using the add_client function
-                    add_client(client, 'database')
+                    add_client(client, 'database.db')
                     print('CLIENTE ADICIONADA A BASE DE DADOS\n')
                 case 2:
                     # takes the user input for the client name and searches the database using the name_consult function
@@ -65,7 +70,7 @@ if __name__ == '__main__':
                                     client = data[0]
                                     show_results(client)
                                     continue
-                                print('ERRO: DOCUMENTO INVÁLIDO, OPERAÇÃO ABORTADA!\n')
+                                print('DOCUMENTO NÃO ENCONTRADO NA BASE DE DADOS!\n')
                             except AssertionError:
                                 print('Documento inválido (REF - xxx.xxx.xxx-xx), OPERAÇÃO ABORTADA!\n'.upper())
                 case 3:
