@@ -116,7 +116,7 @@ if __name__ == '__main__':
                                 print(f"DATA: {_['date_transaction']}")
                                 print('-' * 50)
                         else:
-                            print('\nNENHUMA OPERAÇÃO REGISTRADA.\n')
+                            print('\nNENHUMA OPERAÇÃO REGISTRADA. \n')
                         continue
                     elif results == 1:
                         print('ERRO: DOCUMENTO INVÁLIDO, OPERAÇÃO ABORTADA!\n')
