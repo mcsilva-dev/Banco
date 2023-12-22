@@ -14,11 +14,6 @@ if __name__ == '__main__':
             # matches the selected option and executes the corresponding code block
             match option:
                 case 1:
-                    """
-                    This function is used to add a new client to the database. It takes 
-                    the user input for the client details and creates a new Client object. 
-                    The object is then added to the database using the add_client function.
-                    """
                     # creates a new Client object with the user input for the client details
                     print()
                     print("ADICIONANDO NOVO CLIENTE".center(50, '-'))
@@ -35,12 +30,6 @@ if __name__ == '__main__':
                     add_client(client, 'database')
                     print('CLIENTE ADICIONADA A BASE DE DADOS\n')
                 case 2:
-                    """
-                    This function is used to search for a client in the database based 
-                    on their name. It takes the user input for the client name and searches 
-                    the database using the name_consult function. If a client is found, 
-                    their details are printed. If no client is found, a message is displayed.
-                    """
                     # takes the user input for the client name and searches the database using the name_consult function
                     while True:
                         print()
