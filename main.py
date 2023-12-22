@@ -38,7 +38,7 @@ if __name__ == '__main__':
                         continue
                     # adds the client object to the database using the add_client function
                     add_client(client, 'database.db')
-                    print('CLIENTE ADICIONADA A BASE DE DADOS\n')
+                    print('CLIENTE ADICIONADO(A) AO BANCO DE DADOS\n')
                 case 2:
                     # takes the user input for the client name and searches the database using the name_consult function
                     while True:
